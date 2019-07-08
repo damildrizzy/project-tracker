@@ -47,7 +47,7 @@ Admin Editing Users:
 ##### Clone the repo
 
 ```
-$ git clone https://github.com/hack4impact/flask-base.git
+$ git clone https://github.com/longniao/flask-base.git
 $ cd flask-base
 ```
 
