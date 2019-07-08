@@ -7,7 +7,7 @@ from collections import OrderedDict
 version = "0.0.2"
 
 readme = ''
-with io.open('README.md', 'rt', encoding='utf8') as f:
+with io.open('README.rst', 'rt', encoding='utf8') as f:
     readme = f.read()
 
 setup(

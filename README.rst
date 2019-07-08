@@ -3,12 +3,12 @@ flask-base
 
 |python3.x| |python2.x|
 
-.. figure:: readme_media/logo.png
+.. figure:: https://raw.githubusercontent.com/longniao/flask-base/master/readme_media/logo.png
    :alt: flask-base
 
    flask-base
-A Flask application template with the boilerplate code already done for
-you.
+
+A Flask application template with the boilerplate code already done for you.
 
 **Documentation available at http://hack4impact.github.io/flask-base.**
 
@@ -31,28 +31,28 @@ Demos
 
 Home Page:
 
-.. figure:: readme_media/home.gif
+.. figure:: https://raw.githubusercontent.com/longniao/flask-base/master/readme_media/home.gif
    :alt: home
 
-   home
+
 Registering User:
 
-.. figure:: readme_media/register.gif
+.. figure:: https://raw.githubusercontent.com/longniao/flask-base/master/readme_media/register.gif
    :alt: register
 
-   registering
+
 Admin Editing Page:
 
-.. figure:: readme_media/editpage.gif
+.. figure:: https://raw.githubusercontent.com/longniao/flask-base/master/readme_media/editpage.gif
    :alt: editpage
 
-   edit page
+
 Admin Editing Users:
 
-.. figure:: readme_media/edituser.gif
+.. figure:: https://raw.githubusercontent.com/longniao/flask-base/master/readme_media/edituser.gif
    :alt: edituser
 
-   edit user
+
 Setting up
 ----------
 
