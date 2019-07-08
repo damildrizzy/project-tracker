@@ -7,7 +7,7 @@ from flask_login import LoginManager
 from flask_mail import Mail
 from flask_rq import RQ
 from flask_sqlalchemy import SQLAlchemy
-from flask_wtf import CsrfProtect
+from flask_wtf.csrf import CSRFProtect
 
 from app.assets import app_css, app_js, vendor_css, vendor_js
 from config import config
@@ -16,7 +16,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 mail = Mail()
 db = SQLAlchemy()
-csrf = CsrfProtect()
+csrf = CSRFProtect()
 compress = Compress()
 
 # Set up Flask-Login
@@ -30,7 +30,7 @@ def create_app(config_name):
     app.config.from_object(config[config_name])
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     # not using sqlalchemy event system, hence disabling it
-
+    print(app.__dict__)
     config[config_name].init_app(app)
 
     # Set up extensions
