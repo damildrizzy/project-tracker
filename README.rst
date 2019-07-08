@@ -1,8 +1,7 @@
 flask-base
 ==========
 
-|Circle CI| |Stories in Ready| |Code Climate| |Issue Count| |python3.x|
-|python2.x|
+|python3.x| |python2.x|
 
 .. figure:: readme_media/logo.png
    :alt: flask-base
