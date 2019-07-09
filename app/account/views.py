@@ -81,6 +81,7 @@ def logout():
     return redirect(url_for('main.index'))
 
 
+@account.route('/')
 @account.route('/manage', methods=['GET', 'POST'])
 @account.route('/manage/info', methods=['GET', 'POST'])
 @login_required
