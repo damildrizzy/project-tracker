@@ -3,9 +3,12 @@ from flask_login import AnonymousUserMixin, UserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import BadSignature, SignatureExpired
 from werkzeug.security import check_password_hash, generate_password_hash
+from sqlalchemy_mptt import BaseNestedSets
+from sqlalchemy.orm import backref
 
 from .. import db, login_manager
 
+from sqlalchemy_utils import ChoiceType
 
 class Permission:
     GENERAL = 0x01
@@ -54,6 +57,9 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    comments = db.relationship('Comment', backref='user', lazy='dynamic')
+    tickets = db.relationship('Ticket', backref='user', lazy='dynamic')
+
 
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
@@ -177,7 +183,7 @@ class User(UserMixin, db.Model):
                 db.session.rollback()
 
     def __repr__(self):
-        return '<User \'%s\'>' % self.full_name()
+        return self.full_name()
 
 
 class AnonymousUser(AnonymousUserMixin):
@@ -194,3 +200,73 @@ login_manager.anonymous_user = AnonymousUser
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
+class Project(db.Model):
+    __tablename__ = 'projects'
+
+
+    id = db.Column(db.Integer, primary_key = True)
+    name = db.Column(db.String(64))
+    manager = db.Column(db.String())
+    description = db.Column(db.String())
+    created_at = db.Column(db.DateTime, default=db.func.now())
+    tickets = db.relationship('Ticket', backref='project',
+                                lazy='dynamic')
+
+
+
+
+class Ticket(db.Model):
+    __tablename__ = 'tickets'
+
+    id = db.Column(db.Integer, primary_key = True)
+    project_id = db.relationship('Project')
+    subject = db.Column(db.String(64))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete="CASCADE"))
+    description =  db.Column(db.String(64))
+    priority = db.Column(db.String(64))
+    status = db.Column(db.String(64))
+    project_id = db.Column(db.Integer, db.ForeignKey('projects.id', ondelete="CASCADE"))
+    comments = db.relationship('Comment', backref=backref('ticket'), lazy='dynamic',
+                               cascade="all, delete-orphan")
+    created_by = db.relationship('User')
+    created_at = db.Column(db.DateTime, default=db.func.now())
+    updated_at = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
+
+    def __repr__(self):
+        return '<Ticket %r>' % (self.name)
+    
+    
+    
+
+
+class Comment(db.Model, BaseNestedSets):
+    __tablename__ = 'ticket_comments'
+
+    id = db.Column(db.Integer, primary_key = True)
+    text = db.Column(db.String(), default=None)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete="CASCADE"))
+    ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id', ondelete="CASCADE"))
+    author = db.relationship('User')
+    created_at = db.Column(db.DateTime, default=db.func.now())
+    updated_at = db.Column(db.DateTime, default=db.func.now(), onupdate=db.func.now())
+    depth = db.Column(db.Integer, default=1)
+
+    def __repr__(self):
+        return '<Comment %r>' % (self.text[:25])
+
+    # def __init__(self, text, ticket_id, user_id, parent_id = None):
+    #     self.text = text
+    #     self.ticket_id = ticket_id
+    #     self.user_id = user_id
+    # #   self.parent_id = parent_id
+
+    # def set_depth(self):
+    #     if self.parent:
+    #         self.depth = self.parent.depth + 1
+    #         db.session.commit()
+
+
+
+    
